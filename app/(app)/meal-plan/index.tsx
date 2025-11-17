@@ -7,13 +7,15 @@ import {
     Text,
     View,
 } from 'react-native';
+import { Card } from '../../../src/components/Card';
+import { Screen } from '../../../src/components/Screen';
 import { useMealPlan } from '../../../src/store/mealPlanStore';
 
 export default function MealPlanScreen() {
   const { plannedRecipes, clearMealPlan } = useMealPlan();
 
   return (
-    <View style={styles.container}>
+    <Screen>
       <Text style={styles.title}>Meal Plan</Text>
       <Text style={styles.subtitle}>
         Quick overview of recipes you’ve planned to cook.
@@ -32,7 +34,9 @@ export default function MealPlanScreen() {
         data={plannedRecipes}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={
-          plannedRecipes.length === 0 ? styles.emptyContainer : styles.listContent
+          plannedRecipes.length === 0
+            ? styles.emptyContainer
+            : styles.listContent
         }
         ListEmptyComponent={
           <Text style={styles.emptyText}>
@@ -41,7 +45,7 @@ export default function MealPlanScreen() {
           </Text>
         }
         renderItem={({ item, index }) => (
-          <View style={styles.card}>
+          <Card style={styles.card}>
             <View style={styles.badge}>
               <Text style={styles.badgeText}>{index + 1}</Text>
             </View>
@@ -51,15 +55,14 @@ export default function MealPlanScreen() {
                 Recipe ID: {item.recipeId}
               </Text>
             </View>
-          </View>
+          </Card>
         )}
       />
-    </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: '#f6f6f6' },
   title: { fontSize: 24, fontWeight: '600' },
   subtitle: { fontSize: 12, color: '#666', marginBottom: 12 },
   headerRow: {
@@ -84,15 +87,6 @@ const styles = StyleSheet.create({
   card: {
     flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
-    marginBottom: 10,
-    borderRadius: 12,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOpacity: 0.04,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 1,
   },
   badge: {
     width: 28,

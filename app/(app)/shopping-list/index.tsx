@@ -7,18 +7,20 @@ import {
     Text,
     View,
 } from 'react-native';
+import { Card } from '../../../src/components/Card';
+import { Screen } from '../../../src/components/Screen';
 import { useMealPlan } from '../../../src/store/mealPlanStore';
 
 export default function ShoppingListScreen() {
   const { shoppingItems, clearShoppingList } = useMealPlan();
 
-  // Sort by recipe name so items are grouped visually
+  // Sort so items from the same recipe are near each other
   const sortedItems = [...shoppingItems].sort((a, b) =>
     a.fromRecipeTitle.localeCompare(b.fromRecipeTitle),
   );
 
   return (
-    <View style={styles.container}>
+    <Screen>
       <Text style={styles.title}>Shopping List</Text>
       <Text style={styles.subtitle}>
         Ingredients pulled from your planned recipes.
@@ -35,7 +37,9 @@ export default function ShoppingListScreen() {
         data={sortedItems}
         keyExtractor={(item) => item.id.toString()}
         contentContainerStyle={
-          sortedItems.length === 0 ? styles.emptyContainer : styles.listContent
+          sortedItems.length === 0
+            ? styles.emptyContainer
+            : styles.listContent
         }
         ListEmptyComponent={
           <Text style={styles.emptyText}>
@@ -44,22 +48,21 @@ export default function ShoppingListScreen() {
           </Text>
         }
         renderItem={({ item }) => (
-          <View style={styles.itemRow}>
+          <Card style={styles.itemCard}>
             <View style={styles.itemMain}>
               <Text style={styles.itemName}>{item.name}</Text>
               <Text style={styles.itemSource}>
                 from {item.fromRecipeTitle}
               </Text>
             </View>
-          </View>
+          </Card>
         )}
       />
-    </View>
+    </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: '#f6f6f6' },
   title: { fontSize: 24, fontWeight: '600' },
   subtitle: { fontSize: 12, color: '#666', marginBottom: 12 },
   headerRow: {
@@ -81,17 +84,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
   },
-  itemRow: {
+  itemCard: {
     paddingVertical: 10,
     paddingHorizontal: 10,
-    marginBottom: 6,
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOpacity: 0.03,
-    shadowRadius: 3,
-    shadowOffset: { width: 0, height: 1 },
-    elevation: 1,
   },
   itemMain: { flexShrink: 1 },
   itemName: { fontSize: 15, fontWeight: '500', marginBottom: 2 },

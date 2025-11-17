@@ -11,8 +11,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import type { Recipe } from '../../../src/api/recipes';
-import { getRecipes } from '../../../src/api/recipes';
+import { getRecipes, type Recipe } from '../../../src/api/recipes';
+import { Card } from '../../../src/components/Card';
+import { Screen } from '../../../src/components/Screen';
+
 
 export default function RecipeListScreen() {
   const [search, setSearch] = useState('');
@@ -28,7 +30,7 @@ export default function RecipeListScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <Screen>
       <Text style={styles.title}>Recipes</Text>
       <Text style={styles.subtitle}>
         Search and explore your saved recipes.
@@ -73,32 +75,33 @@ export default function RecipeListScreen() {
           <TouchableOpacity
             activeOpacity={0.85}
             onPress={() => onOpenRecipe(item.id)}
-            style={styles.card}
           >
-            <Text style={styles.cardTitle}>{item.title}</Text>
-            {item.description ? (
-              <Text numberOfLines={2} style={styles.cardDescription}>
-                {item.description}
-              </Text>
-            ) : null}
-            <View style={styles.cardMetaRow}>
-              <Text style={styles.cardMeta}>
-                Prep {item.prep_time_minutes ?? '?'} min
-              </Text>
-              <Text style={styles.cardDot}>•</Text>
-              <Text style={styles.cardMeta}>
-                Cook {item.cook_time_minutes ?? '?'} min
-              </Text>
-            </View>
+            <Card>
+              <Text style={styles.cardTitle}>{item.title}</Text>
+              {item.description ? (
+                <Text numberOfLines={2} style={styles.cardDescription}>
+                  {item.description}
+                </Text>
+              ) : null}
+              <View style={styles.cardMetaRow}>
+                <Text style={styles.cardMeta}>
+                  Prep {item.prep_time_minutes ?? '?'} min
+                </Text>
+                <Text style={styles.cardDot}>•</Text>
+                <Text style={styles.cardMeta}>
+                  Cook {item.cook_time_minutes ?? '?'} min
+                </Text>
+              </View>
+            </Card>
           </TouchableOpacity>
         )}
       />
-    </View>
+    </Screen>
   );
 }
 
+// keep your existing styles, but drop container bg/padding if Screen handles it
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 16, backgroundColor: '#f6f6f6' },
   title: { fontSize: 24, fontWeight: '600' },
   subtitle: { fontSize: 12, color: '#666', marginBottom: 12 },
   input: {
@@ -118,17 +121,6 @@ const styles = StyleSheet.create({
   loadingText: { marginLeft: 8, color: '#555' },
   errorText: { color: 'red', marginBottom: 8 },
   listContent: { paddingTop: 4, paddingBottom: 16 },
-  card: {
-    backgroundColor: '#fff',
-    padding: 14,
-    borderRadius: 12,
-    marginBottom: 10,
-    shadowColor: '#000',
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    shadowOffset: { width: 0, height: 2 },
-    elevation: 1,
-  },
   cardTitle: { fontSize: 18, fontWeight: '500', marginBottom: 4 },
   cardDescription: { color: '#555', marginBottom: 8, fontSize: 14 },
   cardMetaRow: {
